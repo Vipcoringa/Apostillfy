@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Digital - Apostilas Educacionais</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .book-card {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        .grade-btn {
+            transition: all 0.3s ease;
+        }
+        .grade-btn:hover {
+            transform: scale(1.05);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-book-open text-3xl"></i>
+                    <h1 class="text-2xl font-bold">Biblioteca Digital</h1>
+                </div>
+                <div class="hidden md:flex space-x-4">
+                    <button onclick="showPage('home')" class="px-4 py-2 rounded-lg hover:bg-blue-700 transition">Início</button>
+                    <button onclick="showPage('about')" class="px-4 py-2 rounded-lg hover:bg-blue-700 transition">Sobre</button>
+                </div>
+                <button class="md:hidden text-2xl" id="mobile-menu-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden bg-blue-700 text-white py-4 px-4 md:hidden">
+        <button onclick="showPage('home')" class="block w-full text-left py-2 hover:bg-blue-600 px-4 rounded">Início</button>
+        <button onclick="showPage('about')" class="block w-full text-left py-2 hover:bg-blue-600 px-4 rounded">Sobre</button>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Home Page -->
+        <div id="home" class="page active fade-in">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Apostilas Educacionais</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Selecione a série desejada para acessar os materiais disponíveis</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <!-- Grade Buttons -->
+                <button onclick="showGrade('1serie')" class="grade-btn bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                    <i class="fas fa-graduation-cap text-4xl mb-3"></i>
+                    <span class="text-xl font-semibold">1ª Série</span>
+                </button>
+
+                <button onclick="showGrade('2serie')" class="grade-btn bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                    <i class="fas fa-book text-4xl mb-3"></i>
+                    <span class="text-xl font-semibold">2ª Série</span>
+                </button>
+
+                <button onclick="showGrade('3serie')" class="grade-btn bg-gradient-to-r from-purple-500 to-purple-600 text-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                    <i class="fas fa-user-graduate text-4xl mb-3"></i>
+                    <span class="text-xl font-semibold">3ª Série</span>
+                </button>
+
+                <button onclick="showGrade('6ano')" class="grade-btn bg-gradient-to-r from-yellow-500 to-yellow-600 text-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                    <i class="fas fa-child text-4xl mb-3"></i>
+                    <span class="text-xl font-semibold">6° Ano</span>
+                </button>
+
+                <button onclick="showGrade('7ano')" class="grade-btn bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                    <i class="fas fa-user text-4xl mb-3"></i>
+                    <span class="text-xl font-semibold">7° Ano</span>
+                </button>
+
+                <button onclick="showGrade('8ano')" class="grade-btn bg-gradient-to-r from-indigo-500 to-indigo-600 text-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                    <i class="fas fa-user-friends text-4xl mb-3"></i>
+                    <span class="text-xl font-semibold">8° Ano</span>
+                </button>
+
+                <button onclick="showGrade('9ano')" class="grade-btn bg-gradient-to-r from-pink-500 to-pink-600 text-white p-6 rounded-xl shadow-lg flex flex-col items-center">
+                    <i class="fas fa-star text-4xl mb-3"></i>
+                    <span class="text-xl font-semibold">9° Ano</span>
+                </button>
+            </div>
+
+            <!-- Grade Content (hidden by default) -->
+            <div id="grade-content" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <button onclick="hideGrade()" class="flex items-center text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar
+                    </button>
+                    <h3 id="grade-title" class="text-2xl font-bold text-gray-800"></h3>
+                </div>
+
+                <div id="grade-books" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Books will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="max-w-3xl mx-auto bg-white rounded-xl shadow-md overflow-hidden p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Sobre a Biblioteca Digital</h2>
+                    <div class="w-20 h-1 bg-blue-500 mx-auto"></div>
+                </div>
+                
+                <div class="space-y-6 text-gray-700">
+                    <p>
+                        Esta plataforma foi desenvolvida para centralizar e facilitar o acesso aos materiais educacionais 
+                        disponibilizados pela Secretaria de Educação do Estado de São Paulo.
+                    </p>
+                    
+                    <p>
+                        Aqui você encontrará apostilas completas para todas as séries do Ensino Fundamental e Médio, 
+                        organizadas de forma intuitiva para facilitar sua navegação.
+                    </p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h3 class="font-semibold text-blue-700 mb-2">Como usar:</h3>
+                        <ol class="list-decimal pl-5 space-y-2">
+                            <li>Selecione a série desejada</li>
+                            <li>Escolha o volume do material que deseja acessar</li>
+                            <li>Clique no botão "Acessar PDF" para abrir o arquivo</li>
+                        </ol>
+                    </div>
+                    
+                    <p>
+                        Todos os materiais são disponibilizados gratuitamente para fins educacionais e de estudo.
+                    </p>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-gray-200">
+                    <button onclick="showPage('home')" class="flex items-center text-blue-600 hover:text-blue-800">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Voltar para a página inicial
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold mb-2">Biblioteca Digital</h3>
+                    <p class="text-gray-400">Acesso fácil a materiais educacionais</p>
+<p class="mt-4">Com grandes poderes, vêm grandes responsabilidades.</p>
+</div>
+                <div class="flex space-x-4">
+    <a href="https://github.com/ramonqwk/ApostilasDigitais" target="_blank" class="text-gray-400 hover:text-white transition">
+        <i class="fab fa-github text-xl"></i>
+    </a>
+    <a href="https://www.instagram.com" target="_blank" class="text-gray-400 hover:text-white transition">
+        <i class="fab fa-instagram text-xl"></i>
+    </a>
+    <a href="https://discord.gg/platformdestroyer" target="_blank" class="text-gray-400 hover:text-white transition">
+        <i class="fab fa-discord text-xl"></i>
+    </a>
+    <a href="https://pixgg.com/ramon" target="_blank" class="text-gray-400 hover:text-white transition">
+        <i class="fas fa-qrcode text-xl"></i>
+    </a>
+</div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-700 text-center text-gray-400 text-sm">
+                <p>Plataform Destroyer. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+            
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Grade navigation
+        function showGrade(grade) {
+            // Hide home content
+            document.getElementById('grade-content').classList.remove('hidden');
+            
+            // Set grade title
+            const titles = {
+                '1serie': 'Apostilas 1ª Série',
+                '2serie': 'Apostilas 2ª Série',
+                '3serie': 'Apostilas 3ª Série',
+                '6ano': 'Apostilas 6° Ano',
+                '7ano': 'Apostilas 7° Ano',
+                '8ano': 'Apostilas 8° Ano',
+                '9ano': 'Apostilas 9° Ano'
+            };
+            document.getElementById('grade-title').textContent = titles[grade];
+            
+            // Clear previous books
+            const booksContainer = document.getElementById('grade-books');
+            booksContainer.innerHTML = '';
+            
+            // Add books based on grade
+            const books = getBooksForGrade(grade);
+            books.forEach(book => {
+                const bookElement = createBookElement(book);
+                booksContainer.appendChild(bookElement);
+            });
+            
+            // Scroll to grade content
+            document.getElementById('grade-content').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function hideGrade() {
+            document.getElementById('grade-content').classList.add('hidden');
+        }
+
+        function createBookElement(book) {
+            const bookElement = document.createElement('div');
+            bookElement.className = 'book-card bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg';
+            
+            let subjectsHtml = '';
+            book.subjects.forEach(subject => {
+                subjectsHtml += `
+                    <div class="mb-3">
+                        <h4 class="font-medium text-gray-800">${subject.name}</h4>
+                        <a href="${subject.link}" target="_blank" class="inline-flex items-center text-blue-600 hover:text-blue-800 mt-1">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Acessar PDF
+                        </a>
+                    </div>
+                `;
+            });
+            
+            bookElement.innerHTML = `
+                <div class="p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="text-3xl mr-3 ${book.color}">
+                            ${book.icon}
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">${book.title}</h3>
+                    </div>
+                    <div class="text-gray-600">
+                        ${subjectsHtml}
+                    </div>
+                </div>
+            `;
+            
+            return bookElement;
+        }
+
+        function getBooksForGrade(grade) {
+            const booksData = {
+                '1serie': [
+                    {
+                        title: 'Livro do Estudante – Volume 1',
+                        icon: '📘',
+                        color: 'text-blue-500',
+                        subjects: [
+                            { name: 'História e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/128887/1071738.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/128886/1071762.pdf' },
+                            { name: 'Física, Biologia e Química', link: 'https://acervocmsp.educacao.sp.gov.br/128889/1071740.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'Livro do Estudante – Volume 2',
+                        icon: '📙',
+                        color: 'text-orange-500',
+                        subjects: [
+                            { name: 'História e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/134895/1162069.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/135098/1166561.pdf' },
+                            { name: 'Biologia, Física e Química', link: 'https://acervocmsp.educacao.sp.gov.br/134900/1162084.pdf' }
+                        ]
+                    }
+                ],
+                '2serie': [
+                    {
+                        title: 'Livro do Estudante – Volume 1',
+                        icon: '📘',
+                        color: 'text-blue-500',
+                        subjects: [
+                            { name: 'História e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/128896/1071753.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/128894/1071768.pdf' },
+                            { name: 'Física, Biologia e Química', link: 'https://acervocmsp.educacao.sp.gov.br/128897/1071774.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'Livro do Estudante – Volume 2',
+                        icon: '📙',
+                        color: 'text-orange-500',
+                        subjects: [
+                            { name: 'História e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/134904/1162100.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/135103/1166601.pdf' },
+                            { name: 'Biologia, Física e Química', link: 'https://acervocmsp.educacao.sp.gov.br/134908/1162109.pdf' }
+                        ]
+                    }
+                ],
+                '3serie': [
+                    {
+                        title: 'Livro do Estudante – Volume 1',
+                        icon: '📘',
+                        color: 'text-blue-500',
+                        subjects: [
+                            { name: 'História e Física', link: 'https://acervocmsp.educacao.sp.gov.br/128899/1071760.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/128900/1071776.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'Livro do Estudante – Volume 2',
+                        icon: '📙',
+                        color: 'text-orange-500',
+                        subjects: [
+                            { name: 'História e Física', link: 'https://acervocmsp.educacao.sp.gov.br/134911/1162126.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/135106/1166617.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'São Paulo em Ação',
+                        icon: '📚',
+                        color: 'text-purple-500',
+                        subjects: [
+                            { name: 'Língua Portuguesa', link: 'https://drive.google.com/file/d/1RtgzVjJl8oxVWU1vwjyNL1AEaQIYWFVw/view?usp=drive_link' },
+                            { name: 'Matemática', link: 'https://drive.google.com/file/d/1s7jtG8Ta0PqvYGBxxmbN-csRqXshfvpy/view?usp=drive_link' }
+                        ]
+                    }
+                ],
+                '6ano': [
+                    {
+                        title: 'Livro do Estudante – Volume 1',
+                        icon: '📘',
+                        color: 'text-blue-500',
+                        subjects: [
+                            { name: 'História, Ciências e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/128857/1071504.pdf' },
+                            { name: 'Língua Portuguesa', link: 'https://acervocmsp.educacao.sp.gov.br/128874/1071692.pdf' },
+                            { name: 'Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/128878/1071714.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'Livro do Estudante – Volume 2',
+                        icon: '📙',
+                        color: 'text-orange-500',
+                        subjects: [
+                            { name: 'História, Geografia e Ciências', link: 'https://acervocmsp.educacao.sp.gov.br/134823/1161288.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/135153/1167415.pdf' }
+                        ]
+                    }
+                ],
+                '7ano': [
+                    {
+                        title: 'Livro do Estudante – Volume 1',
+                        icon: '📘',
+                        color: 'text-blue-500',
+                        subjects: [
+                            { name: 'História, Ciências e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/128859/1071663.pdf' },
+                            { name: 'Língua Portuguesa', link: 'https://acervocmsp.educacao.sp.gov.br/128875/1071698.pdf' },
+                            { name: 'Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/128879/1071719.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'Livro do Estudante – Volume 2',
+                        icon: '📙',
+                        color: 'text-orange-500',
+                        subjects: [
+                            { name: 'História, Geografia e Ciências', link: 'https://acervocmsp.educacao.sp.gov.br/134825/1161386.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/135154/1167428.pdf' }
+                        ]
+                    }
+                ],
+                '8ano': [
+                    {
+                        title: 'Livro do Estudante – Volume 1',
+                        icon: '📘',
+                        color: 'text-blue-500',
+                        subjects: [
+                            { name: 'História, Ciências e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/128871/1071664.pdf' },
+                            { name: 'Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/128880/1071722.pdf' },
+                            { name: 'Língua Portuguesa', link: 'https://acervocmsp.educacao.sp.gov.br/128876/1071703.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'Livro do Estudante – Volume 2',
+                        icon: '📙',
+                        color: 'text-orange-500',
+                        subjects: [
+                            { name: 'História, Geografia e Ciências', link: 'https://acervocmsp.educacao.sp.gov.br/134884/1161968.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/135158/1167452.pdf' }
+                        ]
+                    }
+                ],
+                '9ano': [
+                    {
+                        title: 'Livro do Estudante – Volume 1',
+                        icon: '📘',
+                        color: 'text-blue-500',
+                        subjects: [
+                            { name: 'História, Ciências e Geografia', link: 'https://acervocmsp.educacao.sp.gov.br/128872/1071670.pdf' },
+                            { name: 'Língua Portuguesa', link: 'https://acervocmsp.educacao.sp.gov.br/128877/1071712.pdf' },
+                            { name: 'Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/128881/1071729.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'Livro do Estudante – Volume 2',
+                        icon: '📙',
+                        color: 'text-orange-500',
+                        subjects: [
+                            { name: 'História, Geografia e Ciências', link: 'https://acervocmsp.educacao.sp.gov.br/134887/1161988.pdf' },
+                            { name: 'Língua Portuguesa e Matemática', link: 'https://acervocmsp.educacao.sp.gov.br/135159/1167461.pdf' }
+                        ]
+                    },
+                    {
+                        title: 'São Paulo em Ação',
+                        icon: '📚',
+                        color: 'text-purple-500',
+                        subjects: [
+                            { name: 'Língua Portuguesa', link: 'https://drive.google.com/file/d/1tX3TLbisHsFg-5J5yjRfNHbfF49E2LeB/view?usp=drive_link' },
+                            { name: 'Matemática', link: 'https://drive.google.com/file/d/1Lfic-191WcUNIJ1Pvr8SfZPKuToRZB7X/view?usp=drive_link' }
+                        ]
+                    }
+                ]
+            };
+            
+            return booksData[grade] || [];
+        }
+    </script>
+</html>
